@@ -3,16 +3,22 @@ import joblib
 import numpy as np
 
 # Load trained model
-model = joblib.load('dating_model.pkl')
+model = joblib.load("dating_model.pkl")
 
-# Page Config
+# -----------------------------------
+# Page Configuration
+# -----------------------------------
+
 st.set_page_config(
     page_title="Relationship Risk Analyzer",
     page_icon="🚩",
     layout="centered"
 )
 
+# -----------------------------------
 # Custom CSS
+# -----------------------------------
+
 st.markdown("""
 <style>
 
@@ -50,14 +56,20 @@ div[data-baseweb="select"] {
 </style>
 """, unsafe_allow_html=True)
 
+# -----------------------------------
 # Title
+# -----------------------------------
+
 st.title("🚩 Relationship Risk Analyzer")
 
 st.write("Built for people who say 'I can fix them'.")
 
 st.divider()
 
+# -----------------------------------
 # User Inputs
+# -----------------------------------
+
 age = st.slider(
     "Age",
     18,
@@ -90,12 +102,15 @@ profile_completion = st.slider(
     75
 )
 
-# Convert gender to numeric
+# -----------------------------------
+# Convert Gender
+# -----------------------------------
+
 gender = 1 if gender == "Male" else 0
 
-# -----------------------------
+# -----------------------------------
 # Feature Engineering
-# -----------------------------
+# -----------------------------------
 
 # Engagement Level
 if likes < 50:
@@ -112,27 +127,15 @@ attractiveness_index = (
     ((income / 1000) * 0.2)
 )
 
-# Compatibility Score
-compatibility_score = (
-    (profile_completion * 0.4) +
-    (likes * 0.4) +
-    ((income / 1000) * 0.2)
+# User Influence Score
+user_influence_score = (
+    (likes * 0.7) +
+    (profile_completion * 0.3)
 )
 
-# Profile Visibility
-profile_visibility = (
-    profile_completion * 0.5 +
-    likes * 0.5
-)
-
-# Interaction Score
-interaction_score = (
-    likes * profile_completion
-) / 100
-
-# -----------------------------
-# Prediction
-# -----------------------------
+# -----------------------------------
+# Predict Button
+# -----------------------------------
 
 if st.button("Analyze Relationship Risk 🚨"):
 
@@ -144,9 +147,7 @@ if st.button("Analyze Relationship Risk 🚨"):
         profile_completion,
         engagement_level,
         attractiveness_index,
-        compatibility_score,
-        profile_visibility,
-        interaction_score
+        user_influence_score
     ]])
 
     prediction = model.predict(new_user)
@@ -161,9 +162,9 @@ if st.button("Analyze Relationship Risk 🚨"):
             "💘 Congratulations. Red flags ignored successfully."
         )
 
-        st.progress(90)
-
         st.balloons()
+
+        st.progress(90)
 
         st.metric(
             label="Relationship Survival Chance",
@@ -171,8 +172,8 @@ if st.button("Analyze Relationship Risk 🚨"):
         )
 
         st.info(
-            "AI suggests this relationship may survive "
-            "at least 3 unnecessary arguments."
+            "AI predicts a dangerously high chance "
+            "of replying 'good morning ❤️' every day."
         )
 
     else:
@@ -189,11 +190,13 @@ if st.button("Analyze Relationship Risk 🚨"):
         )
 
         st.warning(
-            "Recommended action: block them before "
-            "they discover astrology."
+            "Recommended action: focus on career development."
         )
 
+# -----------------------------------
 # Sidebar
+# -----------------------------------
+
 st.sidebar.title("⚠️ Disclaimer")
 
 st.sidebar.info(
@@ -201,14 +204,14 @@ st.sidebar.info(
     This model predicts compatibility,
     not emotional stability.
 
-    Results may vary depending on:
-    - bad decisions
-    - mixed signals
-    - unresolved trauma
-    - 'I can fix them' mindset
+    Side effects may include:
+    - attachment issues
+    - trust problems
+    - playlist depression
+    - texting first every time
     """
 )
 
 st.sidebar.success(
-    "Powered by Machine Learning & poor relationship choices."
+    "Powered by Machine Learning & questionable choices."
 )
